@@ -2,7 +2,7 @@ class Container:
     def __init__(self, nomor, tujuan):
         self.nomor = nomor
         self.tujuan = tujuan
-        self.status = "belum diproses"  # Status default
+        self.status = "belum diproses"  
         self.next = None
         self.prev = None
     
