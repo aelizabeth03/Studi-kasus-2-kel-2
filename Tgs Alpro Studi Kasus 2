@@ -1,1 +1,13 @@
-
+class Container:
+    def __init__(self, nomor, tujuan):
+        self.nomor = nomor
+        self.tujuan = tujuan
+        self.status = "belum diproses"  
+        self.next = None
+        self.prev = None
+    
+    def set_status(self, status):
+        if status not in ["belum diproses", "sedang diproses", "sudah diproses"]:
+            print("Status tidak valid!")
+            return
+        self.status = status
