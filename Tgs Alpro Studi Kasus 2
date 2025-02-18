@@ -149,3 +149,89 @@ class SingleLinkedList:
             count += 1
             temp = temp.next
         return count
+
+# DOUBLY LINKED LIST (DLL)
+class DoublyLinkedList:
+    def _init_(self):
+        self.head = None
+        self.tail = None
+    
+    def enqueue(self, nomor, tujuan):
+        # Validasi apakah tujuan hanya berisi huruf atau karakter
+        if not tujuan.isalpha():
+            print("Tujuan pengiriman hanya boleh mengandung huruf!")
+            return
+        
+        new_container = Container(nomor, tujuan)
+        if not self.head:
+            self.head = new_container
+            self.tail = new_container
+        else:
+            temp = self.tail
+            temp.next = new_container
+            new_container.prev = temp
+            self.tail = new_container
+    
+    def dequeue(self, nomor=None):
+        if not self.head:
+            print("Antrian kosong!")
+            return
+        
+        if nomor:
+            # Hapus berdasarkan nomor kontainer
+            temp = self.head
+            while temp:
+                if temp.nomor == nomor:
+                    if temp.prev:  # jika bukan head
+                        temp.prev.next = temp.next
+                    else:
+                        self.head = temp.next  # hapus head
+
+                    if temp.next:  # jika bukan tail
+                        temp.next.prev = temp.prev
+                    else:
+                        self.tail = temp.prev  # hapus tail
+
+                    print(f"Menghapus kontainer {nomor}")
+                    return
+                temp = temp.next
+            print(f"Kontainer dengan nomor {nomor} tidak ditemukan!")
+        
+        else:
+            # Hapus kontainer pertama (head)
+            print(f"Menghapus kontainer {self.head.nomor}")
+            if self.head == self.tail:  # Hanya ada satu kontainer
+                self.head = self.tail = None
+            else:
+                self.head = self.head.next
+                self.head.prev = None
+    
+    def display_forward(self):
+        temp = self.head
+        if not temp:
+            print("Antrean kosong!")
+            return
+        print("Daftar Kontainer (Maju):")
+        while temp:
+            print(f"[{temp.nomor} - {temp.tujuan} - {temp.status}] <-> ", end="")
+            temp = temp.next
+        print("None")
+    
+    def display_backward(self):
+        temp = self.tail
+        if not temp:
+            print("Antrean kosong!")
+            return
+        print("Daftar Kontainer (Mundur):")
+        while temp:
+            print(f"[{temp.nomor} - {temp.tujuan} - {temp.status}] <-> ", end="")
+            temp = temp.prev
+        print("None")
+    
+    def length(self):
+        temp = self.head
+        count = 0
+        while temp:
+            count += 1
+            temp = temp.next
+        return count
