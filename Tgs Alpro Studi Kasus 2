@@ -70,3 +70,24 @@ def main():
                 else:
                     queue.display()
           
+            elif sub_choice == '4' and isinstance(queue, DoublyLinkedList):
+                queue.display_backward()
+            elif sub_choice == '5':
+                print(f"Panjang antrean: {queue.length()}")
+            elif sub_choice == '6':
+                nomor = input("Masukkan nomor kontainer untuk update status: ")
+                status = input("Masukkan status baru (belum diproses, sedang diproses, sudah diproses): ")
+                # Update status kontainer
+                temp = queue.head
+                while temp:
+                    if temp.nomor == nomor:
+                        temp.set_status(status)
+                        print(f"Status kontainer {nomor} diubah menjadi {status}.")
+                        break
+                    temp = temp.next
+                else:
+                    print(f"Kontainer dengan nomor {nomor} tidak ditemukan!")
+            elif sub_choice == '7':
+                break
+            else:
+                print("Pilihan tidak valid atau fitur tidak tersedia untuk tipe antrean ini!")
