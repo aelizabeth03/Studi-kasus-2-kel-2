@@ -91,3 +91,61 @@ def main():
                 break
             else:
                 print("Pilihan tidak valid atau fitur tidak tersedia untuk tipe antrean ini!")
+
+# SINGLE LINKED LIST (SLL)
+class SingleLinkedList:
+    def _init_(self):
+        self.head = None
+    
+    def enqueue(self, nomor, tujuan):
+        # Validasi apakah tujuan hanya berisi huruf atau karakter
+        if not tujuan.isalpha():
+            print("Tujuan pengiriman hanya boleh mengandung huruf!")
+            return
+        
+        new_container = Container(nomor, tujuan)
+        if not self.head:
+            self.head = new_container
+        else:
+            temp = self.head
+            while temp.next:
+                temp = temp.next
+            temp.next = new_container
+    
+    def dequeue(self, nomor=None):
+        if not self.head:
+            print("Antrian kosong!")
+            return
+        if nomor:
+            # Hapus berdasarkan nomor kontainer
+            temp = self.head
+            prev = None
+            while temp:
+                if temp.nomor == nomor:
+                    if prev:
+                        prev.next = temp.next
+                    else:
+                        self.head = temp.next
+                    print(f"Menghapus kontainer {nomor}")
+                    return
+                prev = temp
+                temp = temp.next
+        else:
+            # Hapus kontainer pertama
+            print(f"Menghapus kontainer {self.head.nomor}")
+            self.head = self.head.next
+    
+    def display(self):
+        temp = self.head
+        while temp:
+            print(f"[{temp.nomor} - {temp.tujuan} - {temp.status}] -> ", end="")
+            temp = temp.next
+        print("None")
+    
+    def length(self):
+        temp = self.head
+        count = 0
+        while temp:
+            count += 1
+            temp = temp.next
+        return count
