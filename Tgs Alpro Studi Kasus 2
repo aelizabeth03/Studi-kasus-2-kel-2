@@ -2,7 +2,7 @@ class Container:
     def __init__(self, nomor, tujuan):
         self.nomor = nomor
         self.tujuan = tujuan
-        self.status = "belum diproses"  
+        self.status = "belum diproses"  # Status default
         self.next = None
         self.prev = None
     
@@ -11,6 +11,226 @@ class Container:
             print("Status tidak valid!")
             return
         self.status = status
+
+# SINGLE LINKED LIST (SLL)
+class SingleLinkedList:
+    def __init__(self):
+        self.head = None
+    
+    def enqueue(self, nomor, tujuan):
+        # Validasi apakah tujuan hanya berisi huruf atau karakter
+        if not tujuan.isalpha():
+            print("Tujuan pengiriman hanya boleh mengandung huruf!")
+            return
+        
+        new_container = Container(nomor, tujuan)
+        if not self.head:
+            self.head = new_container
+        else:
+            temp = self.head
+            while temp.next:
+                temp = temp.next
+            temp.next = new_container
+    
+    def dequeue(self, nomor=None):
+        if not self.head:
+            print("Antrian kosong!")
+            return
+        if nomor:
+            temp = self.head
+            prev = None
+            while temp:
+                if temp.nomor == nomor:
+                    if prev:
+                        prev.next = temp.next
+                    else:
+                        self.head = temp.next
+                    print(f"Kontainer {nomor} berhasil dihapus.")  # Tambahkan pesan ini
+                    return
+                prev = temp
+                temp = temp.next
+            print(f"Kontainer dengan nomor {nomor} tidak ditemukan!")  # Jika tidak ditemukan
+        else:
+            print(f"Menghapus kontainer {self.head.nomor}")  # Tambahkan pesan ini
+            self.head = self.head.next
+
+    def display(self):
+        temp = self.head
+        while temp:
+            print(f"[{temp.nomor} - {temp.tujuan} - {temp.status}] -> ", end="")
+            temp = temp.next
+        print("None")
+    
+    def length(self):
+        temp = self.head
+        count = 0
+        while temp:
+            count += 1
+            temp = temp.next
+        return count
+
+
+# DOUBLY LINKED LIST (DLL)
+class DoublyLinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+    
+    def enqueue(self, nomor, tujuan):
+        # Validasi apakah tujuan hanya berisi huruf atau karakter
+        if not tujuan.isalpha():
+            print("Tujuan pengiriman hanya boleh mengandung huruf!")
+            return
+        
+        new_container = Container(nomor, tujuan)
+        if not self.head:
+            self.head = new_container
+            self.tail = new_container
+        else:
+            temp = self.tail
+            temp.next = new_container
+            new_container.prev = temp
+            self.tail = new_container
+    
+    def dequeue(self, nomor=None):
+        if not self.head:
+            print("Antrian kosong!")
+            return
+        
+        if nomor:
+            temp = self.head
+            while temp:
+                if temp.nomor == nomor:
+                    if temp.prev:
+                        temp.prev.next = temp.next
+                    else:
+                        self.head = temp.next
+                    if temp.next:
+                        temp.next.prev = temp.prev
+                    else:
+                        self.tail = temp.prev
+                    print(f"Kontainer {nomor} berhasil dihapus.")  # Tambahkan pesan ini
+                    return
+                temp = temp.next
+            print(f"Kontainer dengan nomor {nomor} tidak ditemukan!")  # Jika tidak ditemukan
+        else:
+            print(f"Menghapus kontainer {self.head.nomor}")  # Tambahkan pesan ini
+            if self.head == self.tail:
+                self.head = self.tail = None
+            else:
+                self.head = self.head.next
+                self.head.prev = None
+
+    def display_forward(self):
+        temp = self.head
+        if not temp:
+            print("Antrean kosong!")
+            return
+        print("Daftar Kontainer (Maju):")
+        while temp:
+            print(f"[{temp.nomor} - {temp.tujuan} - {temp.status}] <-> ", end="")
+            temp = temp.next
+        print("None")
+    
+    def display_backward(self):
+        temp = self.tail
+        if not temp:
+            print("Antrean kosong!")
+            return
+        print("Daftar Kontainer (Mundur):")
+        while temp:
+            print(f"[{temp.nomor} - {temp.tujuan} - {temp.status}] <-> ", end="")
+            temp = temp.prev
+        print("None")
+    
+    def length(self):
+        temp = self.head
+        count = 0
+        while temp:
+            count += 1
+            temp = temp.next
+        return count
+    
+# CIRCULAR LINKED LIST (CLL)
+class CircularLinkedList:
+    def __init__(self):
+        self.head = None
+    
+    def enqueue(self, nomor, tujuan):
+        # Validasi apakah tujuan hanya berisi huruf atau karakter
+        if not tujuan.isalpha():
+            print("Tujuan pengiriman hanya boleh mengandung huruf!")
+            return
+        
+        new_container = Container(nomor, tujuan)
+        if not self.head:
+            self.head = new_container
+            self.head.next = self.head  # Tail menunjuk kembali ke head
+        else:
+            temp = self.head
+            while temp.next != self.head:
+                temp = temp.next
+            temp.next = new_container
+            new_container.next = self.head
+    
+    def dequeue(self, nomor=None):
+        if not self.head:
+            print("Antrian kosong!")
+            return
+        if nomor:
+            temp = self.head
+            prev = None
+            while True:
+                if temp.nomor == nomor:
+                    if prev:
+                        prev.next = temp.next
+                    else:
+                        if temp.next == self.head:
+                            self.head = None
+                        else:
+                            self.head = temp.next
+                            temp = self.head
+                    print(f"Kontainer {nomor} berhasil dihapus.")  # Tambahkan pesan ini
+                    return
+                prev = temp
+                temp = temp.next
+                if temp == self.head:
+                    break
+            print(f"Kontainer dengan nomor {nomor} tidak ditemukan!")  # Jika tidak ditemukan
+        else:
+            print(f"Menghapus kontainer {self.head.nomor}")  # Tambahkan pesan ini
+            if self.head.next == self.head:
+                self.head = None
+            else:
+                temp = self.head
+                while temp.next != self.head:
+                    temp = temp.next
+                temp.next = self.head.next
+                self.head = self.head.next
+
+    def display(self):
+        if not self.head:
+            print("Antrean kosong!")
+            return
+        temp = self.head
+        while True:
+            print(f"[{temp.nomor} - {temp.tujuan} - {temp.status}] -> ", end="")
+            temp = temp.next
+            if temp == self.head:
+                break
+        print("(kembali ke awal)")
+    
+    def length(self):
+        if not self.head:
+            return 0
+        temp = self.head
+        count = 0
+        while True:
+            count += 1
+            temp = temp.next
+            if temp == self.head:  # Sudah kembali ke head
+                break
+        return count
 
 # MENU PROGRAM
 def main():
@@ -60,8 +280,8 @@ def main():
             elif sub_choice == '2':
                 nomor = input("Masukkan nomor kontainer untuk dihapus (biarkan kosong untuk hapus yang pertama): ")
                 # Memastikan nomor kontainer tidak negatif dan hanya berisi angka
-                if nomor and (not nomor.isdigit() or nomor.startswith('-')):
-                    print("Nomor kontainer harus berupa angka positif!")
+                if nomor and nomor.startswith('-'):
+                    print("Nomor kontainer tidak boleh negatif!")
                 else:
                     queue.dequeue(nomor if nomor else None)
             elif sub_choice == '3':
@@ -69,7 +289,6 @@ def main():
                     queue.display_forward()
                 else:
                     queue.display()
-          
             elif sub_choice == '4' and isinstance(queue, DoublyLinkedList):
                 queue.display_backward()
             elif sub_choice == '5':
@@ -86,238 +305,11 @@ def main():
                         break
                     temp = temp.next
                 else:
-                    print(f"Kontainer dengan nomor {nomor} tidak ditemukan!")
+                    print(f"Kontainer dengan nomor {nomor} tidak ditem ukan!")
             elif sub_choice == '7':
                 break
             else:
                 print("Pilihan tidak valid atau fitur tidak tersedia untuk tipe antrean ini!")
-
-# SINGLE LINKED LIST (SLL)
-class SingleLinkedList:
-    def _init_(self):
-        self.head = None
-    
-    def enqueue(self, nomor, tujuan):
-        # Validasi apakah tujuan hanya berisi huruf atau karakter
-        if not tujuan.isalpha():
-            print("Tujuan pengiriman hanya boleh mengandung huruf!")
-            return
-        
-        new_container = Container(nomor, tujuan)
-        if not self.head:
-            self.head = new_container
-        else:
-            temp = self.head
-            while temp.next:
-                temp = temp.next
-            temp.next = new_container
-    
-    def dequeue(self, nomor=None):
-        if not self.head:
-            print("Antrian kosong!")
-            return
-        if nomor:
-            # Hapus berdasarkan nomor kontainer
-            temp = self.head
-            prev = None
-            while temp:
-                if temp.nomor == nomor:
-                    if prev:
-                        prev.next = temp.next
-                    else:
-                        self.head = temp.next
-                    print(f"Menghapus kontainer {nomor}")
-                    return
-                prev = temp
-                temp = temp.next
-        else:
-            # Hapus kontainer pertama
-            print(f"Menghapus kontainer {self.head.nomor}")
-            self.head = self.head.next
-    
-    def display(self):
-        temp = self.head
-        while temp:
-            print(f"[{temp.nomor} - {temp.tujuan} - {temp.status}] -> ", end="")
-            temp = temp.next
-        print("None")
-    
-    def length(self):
-        temp = self.head
-        count = 0
-        while temp:
-            count += 1
-            temp = temp.next
-        return count
-
-# DOUBLY LINKED LIST (DLL)
-class DoublyLinkedList:
-    def _init_(self):
-        self.head = None
-        self.tail = None
-    
-    def enqueue(self, nomor, tujuan):
-        # Validasi apakah tujuan hanya berisi huruf atau karakter
-        if not tujuan.isalpha():
-            print("Tujuan pengiriman hanya boleh mengandung huruf!")
-            return
-        
-        new_container = Container(nomor, tujuan)
-        if not self.head:
-            self.head = new_container
-            self.tail = new_container
-        else:
-            temp = self.tail
-            temp.next = new_container
-            new_container.prev = temp
-            self.tail = new_container
-    
-    def dequeue(self, nomor=None):
-        if not self.head:
-            print("Antrian kosong!")
-            return
-        
-        if nomor:
-            # Hapus berdasarkan nomor kontainer
-            temp = self.head
-            while temp:
-                if temp.nomor == nomor:
-                    if temp.prev:  # jika bukan head
-                        temp.prev.next = temp.next
-                    else:
-                        self.head = temp.next  # hapus head
-
-                    if temp.next:  # jika bukan tail
-                        temp.next.prev = temp.prev
-                    else:
-                        self.tail = temp.prev  # hapus tail
-
-                    print(f"Menghapus kontainer {nomor}")
-                    return
-                temp = temp.next
-            print(f"Kontainer dengan nomor {nomor} tidak ditemukan!")
-        
-        else:
-            # Hapus kontainer pertama (head)
-            print(f"Menghapus kontainer {self.head.nomor}")
-            if self.head == self.tail:  # Hanya ada satu kontainer
-                self.head = self.tail = None
-            else:
-                self.head = self.head.next
-                self.head.prev = None
-    
-    def display_forward(self):
-        temp = self.head
-        if not temp:
-            print("Antrean kosong!")
-            return
-        print("Daftar Kontainer (Maju):")
-        while temp:
-            print(f"[{temp.nomor} - {temp.tujuan} - {temp.status}] <-> ", end="")
-            temp = temp.next
-        print("None")
-    
-    def display_backward(self):
-        temp = self.tail
-        if not temp:
-            print("Antrean kosong!")
-            return
-        print("Daftar Kontainer (Mundur):")
-        while temp:
-            print(f"[{temp.nomor} - {temp.tujuan} - {temp.status}] <-> ", end="")
-            temp = temp.prev
-        print("None")
-    
-    def length(self):
-        temp = self.head
-        count = 0
-        while temp:
-            count += 1
-            temp = temp.next
-        return count
-
-# CIRCULAR LINKED LIST (CLL)
-class CircularLinkedList:
-    def _init_(self):
-        self.head = None
-    
-    def enqueue(self, nomor, tujuan):
-        # Validasi apakah tujuan hanya berisi huruf atau karakter
-        if not tujuan.isalpha():
-            print("Tujuan pengiriman hanya boleh mengandung huruf!")
-            return
-        
-        new_container = Container(nomor, tujuan)
-        if not self.head:
-            self.head = new_container
-            self.head.next = self.head  # Tail menunjuk kembali ke head
-        else:
-            temp = self.head
-            while temp.next != self.head:
-                temp = temp.next
-            temp.next = new_container
-            new_container.next = self.head
-    
-    def dequeue(self, nomor=None):
-        if not self.head:
-            print("Antrian kosong!")
-            return
-        if nomor:
-            # Hapus berdasarkan nomor kontainer
-            temp = self.head
-            prev = None
-            while True:
-                if temp.nomor == nomor:
-                    if prev:
-                        prev.next = temp.next
-                    else:
-                        if temp.next == self.head:
-                            self.head = None
-                        else:
-                            self.head = temp.next
-                            temp = self.head
-                    print(f"Menghapus kontainer {nomor}")
-                    return
-                prev = temp
-                temp = temp.next
-                if temp == self.head:
-                    break
-            print(f"Kontainer dengan nomor {nomor} tidak ditemukan!")
-        else:
-            # Hapus kontainer pertama
-            print(f"Menghapus kontainer {self.head.nomor}")
-            if self.head.next == self.head:
-                self.head = None
-            else:
-                temp = self.head
-                while temp.next != self.head:
-                    temp = temp.next
-                temp.next = self.head.next
-                self.head = self.head.next
-    
-    def display(self):
-        if not self.head:
-            print("Antrean kosong!")
-            return
-        temp = self.head
-        while True:
-            print(f"[{temp.nomor} - {temp.tujuan} - {temp.status}] -> ", end="")
-            temp = temp.next
-            if temp == self.head:
-                break
-        print("(kembali ke awal)")
-    
-    def length(self):
-        if not self.head:
-            return 0
-        temp = self.head
-        count = 0
-        while True:
-            count += 1
-            temp = temp.next
-            if temp == self.head:  # Sudah kembali ke head
-                break
-        return count
 
 if __name__ == "__main__":
     main()
